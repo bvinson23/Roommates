@@ -195,7 +195,17 @@ namespace Roommates
                         int selChoreId = int.Parse(Console.ReadLine());
                         Chore selChore = deleteChoreOptions.FirstOrDefault(c => c.Id == selChoreId);
 
-                        choreRepo.Delete(selChoreId);
+                        try
+                        {
+                            choreRepo.Delete(selChoreId);
+                        }
+                        catch
+                        {
+                            Console.WriteLine("You can't delete this chore, it's been assigned to a roommate!");
+                            Console.Write("Press any key to continue");
+                            Console.ReadKey();
+                            break;
+                        }
 
                         Console.WriteLine("Chore has been successfully deleted.");
                         Console.Write("Press any key to continue");
