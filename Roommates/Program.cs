@@ -99,7 +99,14 @@ namespace Roommates
                         int selRoomId = int.Parse(Console.ReadLine());
                         Room selRoom = deleteOptions.FirstOrDefault(r => r.Id == selRoomId);
 
-                        roomRepo.Delete(selRoomId);
+                        try
+                        {
+                            roomRepo.Delete(selRoomId);
+                        }
+                        catch
+                        {
+                            Console.WriteLine("You can't delete this room, someone or something is living in it.");
+                        }
 
                         Console.WriteLine("Room has been successfullly deleted.");
                         Console.Write("Press any key to continue");
@@ -174,6 +181,24 @@ namespace Roommates
                         Console.ReadKey();
                         break;
 
+                    case ("Delete a chore"):
+                        List<Chore> deleteChoreOptions = choreRepo.GetAll();
+                        foreach (Chore c in deleteChoreOptions)
+                        {
+                            Console.WriteLine($"{c.Id} - {c.Name}");
+                        }
+
+                        Console.Write("Which chore would you like to delete? ");
+                        int selChoreId = int.Parse(Console.ReadLine());
+                        Chore selChore = deleteChoreOptions.FirstOrDefault(c => c.Id == selChoreId);
+
+                        choreRepo.Delete(selChoreId);
+
+                        Console.WriteLine("Chore has been successfully deleted.");
+                        Console.Write("Press any key to continue");
+                        Console.ReadKey();
+                        break;
+
                     case ("Assign chores"):
                         List<Roommate> roommates = roommateRepo.GetAll();
                         foreach (Roommate r in roommates)
@@ -202,7 +227,7 @@ namespace Roommates
                         int roommateId = int.Parse(Console.ReadLine());
 
                         Roommate roommate = roommateRepo.GetById(roommateId);
-                        
+
 
                         Console.WriteLine($"{roommate.FirstName} Rent Portion({roommate.RentPortion}) RoomName({roommate.Room.Name})");
                         Console.Write("Press any key to continue");
@@ -234,6 +259,7 @@ namespace Roommates
                 "Search for chore",
                 "Add a chore",
                 "Update a chore",
+                "Delete a chore",
                 "Assign chores",
                 "Search for roommate",
                 "Exit"
