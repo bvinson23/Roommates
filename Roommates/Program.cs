@@ -106,6 +106,9 @@ namespace Roommates
                         catch
                         {
                             Console.WriteLine("You can't delete this room, someone or something is living in it.");
+                            Console.Write("Press any key to continue");
+                            Console.ReadKey();
+                            break;
                         }
 
                         Console.WriteLine("Room has been successfullly deleted.");
