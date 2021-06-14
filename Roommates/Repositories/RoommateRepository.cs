@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Roommates.Models;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace Roommates.Repositories
 {
@@ -40,6 +41,44 @@ namespace Roommates.Repositories
                     reader.Close();
 
                     return roommate;
+                }
+            }
+        }
+
+        public List<Roommate> GetAll()
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "select * from Roommate";
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<Roommate> roommates = new List<Roommate>();
+
+                    while (reader.Read())
+                    {
+                        int idColumnPosition = reader.GetOrdinal("Id");
+
+                        int idValue = reader.GetInt32(idColumnPosition);
+
+                        int nameColumnPosition = reader.GetOrdinal("FirstName");
+                        string nameValue = reader.GetString(nameColumnPosition);
+
+                        Roommate roommate = new Roommate
+                        {
+                            Id = idValue,
+                            FirstName = nameValue,
+                        };
+
+                        roommates.Add(roommate);
+                    }
+
+                    reader.Close();
+
+                    return roommates;
                 }
             }
         }
